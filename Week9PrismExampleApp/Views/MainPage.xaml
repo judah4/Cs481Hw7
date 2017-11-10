@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    x:Class="Week9PrismExampleApp.Views.MainPage"
+    Title="MainPage"
+    Padding="0,20,0,0">
+    <StackLayout
+        Padding="0,20,0,0"
+        HorizontalOptions="Center"
+        VerticalOptions="Start">
+        <Button
+            Text="Navigation Example"
+            Command="{Binding NavToNewPageCommand}" />
+        <StackLayout
+            Orientation="Horizontal"
+            HorizontalOptions="CenterAndExpand">
+            <Entry
+                Placeholder="Enter Location"
+                Text="{Binding LocationEnteredByUser}"
+                WidthRequest="200" />
+            <Button
+                Text="Search Weather"
+                Command="{Binding GetWeatherForLocationCommand}" />
+        </StackLayout>
+        <ListView
+            x:Name="WeatherListView"
+            ItemsSource="{Binding WeatherCollection}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell
+                        x:Name="WeatherItemCell">
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                x:Name="MoreInfoButton"
+                                AutomationId="MoreInfoButton"
+                                BindingContext="{Binding Source={x:Reference WeatherListView}, Path=BindingContext}"
+                                Command="{Binding NavToMoreInfoPageCommand}"
+                                CommandParameter="{Binding Source={x:Reference WeatherItemCell}, Path=BindingContext}"
+                                Text="More" />
+                        </ViewCell.ContextActions>
+                        <ViewCell.View>
+                            <StackLayout
+                                Orientation="Horizontal">
+                                <Label
+                                    x:Name="LocationNameLabel"
+                                    Text="{Binding Name}"
+                                    VerticalOptions="Center"
+                                    Margin="10" />
+                                <Label
+                                    x:Name="TemperatureLabel"
+                                    Text="{Binding Main.Temp, StringFormat='Temp: {0}'}"
+                                    VerticalOptions="Center"
+                                    Margin="3" />
+                                <Label
+                                    x:Name="CloudLabel"
+                                    Text="{Binding Clouds.All, StringFormat='Cloud %: {0}'}"
+                                    VerticalOptions="Center"
+                                    Margin="3" />
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
