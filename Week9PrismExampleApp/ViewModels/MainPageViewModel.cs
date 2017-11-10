@@ -19,7 +19,9 @@ namespace Week9PrismExampleApp.ViewModels
     {
 		public DelegateCommand NavToNewPageCommand { get; set; }
 		public DelegateCommand GetWeatherForLocationCommand { get; set; }
-		public DelegateCommand<WeatherItem> NavToMoreInfoPageCommand { get; set; }
+		public DelegateCommand<Brewery> NavToMoreInfoPageCommand { get; set; }
+
+        public DelegateCommand<Brewery> RemoveRowCommand { get; set; }
 
         public DelegateCommand RefreshListCommand { get; set; }
 
@@ -44,8 +46,8 @@ namespace Week9PrismExampleApp.ViewModels
             set { SetProperty(ref _locationEnteredByUser, value); }
         }
 
-        private ObservableCollection<BreweryDbModel.Brewery> _weatherCollection = new ObservableCollection<BreweryDbModel.Brewery>();
-        public ObservableCollection<BreweryDbModel.Brewery> WeatherCollection
+        private ObservableCollection<Brewery> _weatherCollection = new ObservableCollection<Brewery>();
+        public ObservableCollection<Brewery> WeatherCollection
         {
             get { return _weatherCollection; }
             set { SetProperty(ref _weatherCollection, value); }
@@ -59,11 +61,14 @@ namespace Week9PrismExampleApp.ViewModels
 
             NavToNewPageCommand = new DelegateCommand(NavToNewPage);
             GetWeatherForLocationCommand = new DelegateCommand(GetWeatherForLocation);
-            NavToMoreInfoPageCommand = new DelegateCommand<WeatherItem>(NavToMoreInfoPage);
+            NavToMoreInfoPageCommand = new DelegateCommand<Brewery>(NavToMoreInfoPage);
             RefreshListCommand = new DelegateCommand(OnRefreshListCommand);
+            RemoveRowCommand = new DelegateCommand<Brewery>(OnRemoveRowCommand);
 
             Title = "Xamarin Forms Application + Prism";
             ButtonText = "Add Name";
+
+            WeatherCollection.Add(new Brewery() {Description = "Tester", Name = "test brewski", Established = "2017", IsOrganic = "N"});
         }
 
         private void OnRefreshListCommand()
@@ -71,11 +76,16 @@ namespace Week9PrismExampleApp.ViewModels
             GetWeatherForLocation();
         }
 
-        private async void NavToMoreInfoPage(WeatherItem weatherItem)
+        private async void NavToMoreInfoPage(Brewery weatherItem)
         {
             var navParams = new NavigationParameters();
             navParams.Add("WeatherItemInfo", weatherItem);
             await _navigationService.NavigateAsync("MoreInfoPage", navParams);
+        }
+
+        private async void OnRemoveRowCommand(Brewery weatherItem)
+        {
+            WeatherCollection.Remove(weatherItem);
         }
 
         internal async void GetWeatherForLocation()
@@ -85,7 +95,7 @@ namespace Week9PrismExampleApp.ViewModels
             if(!string.IsNullOrEmpty(LocationEnteredByUser))
                 return;
 
-            BreweryDbModel.MainPacket<BreweryDbModel.Brewery> weatherData = await Breweries(1, LocationEnteredByUser);
+            MainPacket<Brewery> weatherData = await Breweries(1, LocationEnteredByUser);
             if (weatherData != null)
             {
                 foreach (var brewery in weatherData.Data)
@@ -96,17 +106,17 @@ namespace Week9PrismExampleApp.ViewModels
 
         }
 
-        public async Task<BreweryDbModel.MainPacket<BreweryDbModel.Brewery>> Breweries(int page, string established)
+        public async Task<MainPacket<Brewery>> Breweries(int page, string established)
         {
             HttpClient client = new HttpClient();
             var uri = new Uri(
                 string.Format($"http://api.brewerydb.com/v2/breweries?p={page}&established={established}&key={ApiKeys.ApiKey}"));
             var response = await client.GetAsync(uri);
-            BreweryDbModel.MainPacket<BreweryDbModel.Brewery> weatherData = null;
+            MainPacket<Brewery> weatherData = null;
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                weatherData = JsonConvert.DeserializeObject<BreweryDbModel.MainPacket<BreweryDbModel.Brewery>>(content); //WeatherItem.FromJson(content);
+                weatherData = JsonConvert.DeserializeObject<MainPacket<Brewery>>(content); //WeatherItem.FromJson(content);
             }
             return weatherData;
         }
