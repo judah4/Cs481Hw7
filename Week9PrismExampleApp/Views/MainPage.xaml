@@ -51,12 +51,12 @@
                                     Margin="10" />
                                 <Label
                                     x:Name="TemperatureLabel"
-                                    Text="{Binding Main.Temp, StringFormat='Temp: {0}'}"
+                                    Text="{Binding Established, StringFormat='Established: {0}'}"
                                     VerticalOptions="Center"
                                     Margin="3" />
                                 <Label
                                     x:Name="CloudLabel"
-                                    Text="{Binding Clouds.All, StringFormat='Cloud %: {0}'}"
+                                    Text="{Binding IsOrganic, StringFormat='Is Organic: {0}'}"
                                     VerticalOptions="Center"
                                     Margin="3" />
                             </StackLayout>
