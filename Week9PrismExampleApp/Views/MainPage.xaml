@@ -14,6 +14,11 @@
         <!--<Button
             Text="Navigation Example"
             Command="{Binding NavToNewPageCommand}" />-->
+        <Label
+            x:Name="LocationNameLabel"
+            Text="Breweries by year established"
+            VerticalOptions="Center"
+            Margin="10" />
         <StackLayout
             Orientation="Horizontal"
             HorizontalOptions="CenterAndExpand">
@@ -25,6 +30,7 @@
                 Text="Search"
                 Command="{Binding GetWeatherForLocationCommand}" />
         </StackLayout>
+
         <ListView
             x:Name="WeatherListView"
             ItemsSource="{Binding WeatherCollection}"
