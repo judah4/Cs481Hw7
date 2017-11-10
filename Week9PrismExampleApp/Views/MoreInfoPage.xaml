@@ -11,10 +11,12 @@
             Text="Go Back!"
             Command="{Binding GoBackCommand}" />
         <Label
-            Text="{Binding WeatherItem.Wind.Speed, StringFormat='Wind Speed: {0}'}" />
+            Text="{Binding Brewery.Name}" />
         <Label
-            Text="{Binding WeatherItem.Main.TempMax, StringFormat='Max Temp: {0}'}" />
+            Text="{Binding Brewery.Established, StringFormat='Established: {0}'}" />
         <Label
-            Text="{Binding WeatherItem.Main.TempMin, StringFormat='Min Temp: {0}'}" />
+            Text="{Binding Brewery.IsOrganic, StringFormat='Is Organic: {0}'}" />
+        <Label
+            Text="{Binding Brewery.Description}" />
     </StackLayout>
 </ContentPage>

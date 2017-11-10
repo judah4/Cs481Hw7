@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Prism.Navigation;
+using Week9PrismExampleApp.Models;
 using Xamarin.Forms.Xaml;
 using static Week9PrismExampleApp.Models.WeatherItemModel;
 
@@ -15,8 +16,8 @@ namespace Week9PrismExampleApp.ViewModels
 
 		public DelegateCommand GoBackCommand { get; set; }
 
-        private WeatherItem _weatherItem;
-        public WeatherItem WeatherItem
+        private Brewery _weatherItem;
+        public Brewery Brewery
         {
             get { return _weatherItem; }
             set { SetProperty(ref _weatherItem, value); }
@@ -42,7 +43,7 @@ namespace Week9PrismExampleApp.ViewModels
         {
             if (parameters.ContainsKey("WeatherItemInfo"))
             {
-                WeatherItem = (WeatherItem)parameters["WeatherItemInfo"];
+                Brewery = (Brewery)parameters["WeatherItemInfo"];
             }
         }
     }
