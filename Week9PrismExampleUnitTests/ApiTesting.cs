@@ -22,7 +22,7 @@ namespace Week9PrismExampleUnitTests
         [Test]
         public async Task TestApiData()
         {
-            var result = await easyTestPageViewModel.Breweries(1, 2010);
+            var result = await easyTestPageViewModel.Breweries(1, "2010");
 
             Assert.AreEqual(true, result.Data.Count > 0);
             foreach (var brewery in result.Data)

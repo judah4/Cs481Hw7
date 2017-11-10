@@ -11,18 +11,18 @@
         Padding="0,20,0,0"
         HorizontalOptions="Center"
         VerticalOptions="Start">
-        <Button
+        <!--<Button
             Text="Navigation Example"
-            Command="{Binding NavToNewPageCommand}" />
+            Command="{Binding NavToNewPageCommand}" />-->
         <StackLayout
             Orientation="Horizontal"
             HorizontalOptions="CenterAndExpand">
             <Entry
-                Placeholder="Enter Location"
+                Placeholder="Enter Year Established"
                 Text="{Binding LocationEnteredByUser}"
                 WidthRequest="200" />
             <Button
-                Text="Search Weather"
+                Text="Search"
                 Command="{Binding GetWeatherForLocationCommand}" />
         </StackLayout>
         <ListView

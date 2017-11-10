@@ -72,11 +72,12 @@ namespace Week9PrismExampleApp.ViewModels
 
         internal async void GetWeatherForLocation()
         {
+            WeatherCollection.Clear();
             HttpClient client = new HttpClient();
             var uri = new Uri(
                 string.Format($"http://api.brewerydb.com/v2/breweries?key={ApiKeys.ApiKey}"));
             var response = await client.GetAsync(uri);
-            BreweryDbModel.MainPacket<BreweryDbModel.Brewery> weatherData = null;
+            BreweryDbModel.MainPacket<BreweryDbModel.Brewery> weatherData = await Breweries(1, LocationEnteredByUser);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -92,7 +93,7 @@ namespace Week9PrismExampleApp.ViewModels
 
         }
 
-        public async Task<BreweryDbModel.MainPacket<BreweryDbModel.Brewery>> Breweries(int page, int established)
+        public async Task<BreweryDbModel.MainPacket<BreweryDbModel.Brewery>> Breweries(int page, string established)
         {
             HttpClient client = new HttpClient();
             var uri = new Uri(
