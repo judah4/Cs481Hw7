@@ -27,7 +27,9 @@
         </StackLayout>
         <ListView
             x:Name="WeatherListView"
-            ItemsSource="{Binding WeatherCollection}">
+            ItemsSource="{Binding WeatherCollection}"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding RefreshListCommand}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell

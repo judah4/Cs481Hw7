@@ -21,6 +21,8 @@ namespace Week9PrismExampleApp.ViewModels
 		public DelegateCommand GetWeatherForLocationCommand { get; set; }
 		public DelegateCommand<WeatherItem> NavToMoreInfoPageCommand { get; set; }
 
+        public DelegateCommand RefreshListCommand { get; set; }
+
 		private string _buttonText;
         public string ButtonText
         {
@@ -58,9 +60,15 @@ namespace Week9PrismExampleApp.ViewModels
             NavToNewPageCommand = new DelegateCommand(NavToNewPage);
             GetWeatherForLocationCommand = new DelegateCommand(GetWeatherForLocation);
             NavToMoreInfoPageCommand = new DelegateCommand<WeatherItem>(NavToMoreInfoPage);
+            RefreshListCommand = new DelegateCommand(OnRefreshListCommand);
 
             Title = "Xamarin Forms Application + Prism";
             ButtonText = "Add Name";
+        }
+
+        private void OnRefreshListCommand()
+        {
+            GetWeatherForLocation();
         }
 
         private async void NavToMoreInfoPage(WeatherItem weatherItem)
@@ -73,16 +81,11 @@ namespace Week9PrismExampleApp.ViewModels
         internal async void GetWeatherForLocation()
         {
             WeatherCollection.Clear();
-            HttpClient client = new HttpClient();
-            var uri = new Uri(
-                string.Format($"http://api.brewerydb.com/v2/breweries?key={ApiKeys.ApiKey}"));
-            var response = await client.GetAsync(uri);
+
+            if(!string.IsNullOrEmpty(LocationEnteredByUser))
+                return;
+
             BreweryDbModel.MainPacket<BreweryDbModel.Brewery> weatherData = await Breweries(1, LocationEnteredByUser);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                weatherData = JsonConvert.DeserializeObject<BreweryDbModel.MainPacket<BreweryDbModel.Brewery>>(content); //WeatherItem.FromJson(content);
-            }
             if (weatherData != null)
             {
                 foreach (var brewery in weatherData.Data)
