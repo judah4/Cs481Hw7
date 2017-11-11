@@ -46,6 +46,15 @@ namespace Week9PrismExampleApp.ViewModels
             set { SetProperty(ref _locationEnteredByUser, value); }
         }
 
+         private bool _refreshingList;
+        public bool RefreshingList
+        {
+            get { return _refreshingList; }
+            set { SetProperty(ref _refreshingList, value); }
+        }
+
+        
+
         private ObservableCollection<Brewery> _weatherCollection = new ObservableCollection<Brewery>();
         public ObservableCollection<Brewery> WeatherCollection
         {
@@ -67,13 +76,16 @@ namespace Week9PrismExampleApp.ViewModels
 
             Title = "Xamarin Forms Application + Prism";
             ButtonText = "Add Name";
+            LocationEnteredByUser = "2010";
 
-            WeatherCollection.Add(new Brewery() {Description = "Tester", Name = "test brewski", Established = "2017", IsOrganic = "N"});
+            
+            //WeatherCollection.Add(new Brewery() {Description = "Tester", Name = "test brewski", Established = "2017", IsOrganic = "N"});
         }
 
         private void OnRefreshListCommand()
         {
             GetWeatherForLocation();
+            RefreshingList = false;
         }
 
         private async void NavToMoreInfoPage(Brewery weatherItem)
@@ -83,7 +95,7 @@ namespace Week9PrismExampleApp.ViewModels
             await _navigationService.NavigateAsync("MoreInfoPage", navParams);
         }
 
-        private async void OnRemoveRowCommand(Brewery weatherItem)
+        private void OnRemoveRowCommand(Brewery weatherItem)
         {
             WeatherCollection.Remove(weatherItem);
         }
@@ -92,13 +104,16 @@ namespace Week9PrismExampleApp.ViewModels
         {
             WeatherCollection.Clear();
 
-            if(!string.IsNullOrEmpty(LocationEnteredByUser))
+
+            if(string.IsNullOrEmpty(LocationEnteredByUser))
                 return;
 
-            MainPacket<Brewery> weatherData = await Breweries(1, LocationEnteredByUser);
+            MainPacket<Brewery> weatherData = await Breweries(1, "2010");
+
             if (weatherData != null)
             {
-                foreach (var brewery in weatherData.Data)
+
+                foreach (var brewery in weatherData.Data.Take(10))
                 {
                     WeatherCollection.Add(brewery);
                 }
@@ -135,6 +150,9 @@ namespace Week9PrismExampleApp.ViewModels
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
+            RefreshingList = true;
+            GetWeatherForLocation();
+            RefreshingList = false;
         }
 
         public void OnNavigatingTo(NavigationParameters parameters)

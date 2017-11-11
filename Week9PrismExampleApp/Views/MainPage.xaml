@@ -25,7 +25,7 @@
             <Entry
                 Placeholder="Enter Year Established"
                 Text="{Binding LocationEnteredByUser}"
-                WidthRequest="200" />
+                WidthRequest="200"/>
             <Button
                 Text="Search"
                 Command="{Binding GetWeatherForLocationCommand}" />
@@ -35,6 +35,7 @@
             x:Name="WeatherListView"
             ItemsSource="{Binding WeatherCollection}"
             IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding RefreshingList}"
             RefreshCommand="{Binding RefreshListCommand}">
             <ListView.ItemTemplate>
                 <DataTemplate>
